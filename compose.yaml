@@ -1,0 +1,21 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: sirji-homecare-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: sirji_homecare
+      POSTGRES_USER: sirji
+      POSTGRES_PASSWORD: local-development-only
+    ports:
+      - "5432:5432"
+    volumes:
+      - sirji-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sirji -d sirji_homecare"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  sirji-postgres-data:
